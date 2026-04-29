@@ -1,0 +1,206 @@
+[2026-04-28 16:58:54] Tú: hola
+[2026-04-28 16:58:54] IA: Hola Areli. Puedo ayudarte con emociones o programación. ¿Qué hacemos hoy?
+
+[2026-04-28 16:59:13] Tú: estoy agotada
+[2026-04-28 16:59:13] IA: Detecto presión o cansancio. Primero respira, después separa el problema en partes pequeñas. No intentes resolver todo al mismo tiempo.
+
+[2026-04-28 16:59:24] Tú: no e  tomado  agua
+[2026-04-28 16:59:24] IA: Cuéntame más. Puedo ayudarte con emociones, programación, SQL, Laravel, React o Vite.
+
+[2026-04-28 16:59:27] Tú: no
+[2026-04-28 16:59:27] IA: Cuéntame más. Puedo ayudarte con emociones, programación, SQL, Laravel, React o Vite.
+
+[2026-04-28 17:06:18] Tú: emociones
+[2026-04-28 17:06:18] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:06:26] Tú: enojo
+[2026-04-28 17:06:26] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:06:36] Tú:  sueño 
+[2026-04-28 17:06:36] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:06:39] Tú: cansancio 
+[2026-04-28 17:06:39] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:06:41] Tú:  aaaaaaaaaaaa
+[2026-04-28 17:06:41] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:06:46] Tú: programacion
+[2026-04-28 17:06:46] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:07:05] Tú: laravel
+[2026-04-28 17:07:05] IA: Revisión:
+1. routes/web.php
+2. Controller
+3. Modelo
+4. storage/logs/laravel.log
+5. php artisan optimize:clear
+
+[2026-04-28 17:07:08] Tú: modelo
+[2026-04-28 17:07:08] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:07:18] Tú: laravel
+[2026-04-28 17:07:18] IA: Revisión:
+1. routes/web.php
+2. Controller
+3. Modelo
+4. storage/logs/laravel.log
+5. php artisan optimize:clear
+
+[2026-04-28 17:07:23] Tú: Modelo
+[2026-04-28 17:07:23] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:07:35] Tú: feliz
+[2026-04-28 17:07:35] IA: Detecto buena energía. Aprovecha ese impulso para avanzar.
+
+[2026-04-28 17:08:28] Tú: hambre
+[2026-04-28 17:08:28] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:08:36] Tú: contenta
+[2026-04-28 17:08:36] IA: Detecto buena energía. Aprovecha ese impulso para avanzar.
+
+[2026-04-28 17:10:00] Tú: emocion
+[2026-04-28 17:10:00] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:10:06] Tú: hambre
+[2026-04-28 17:10:06] IA: Detecto buena energía. Aprovecha ese impulso para avanzar omas  yo que se.
+
+[2026-04-28 17:11:35] Tú: sueño
+[2026-04-28 17:11:35] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:11:40] Tú: sueño
+[2026-04-28 17:11:40] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:11:45] Tú: cansada
+[2026-04-28 17:11:45] IA: Detecto presión o cansancio. Divide el problema en pasos pequeños.
+
+[2026-04-28 17:11:52] Tú: sueña
+[2026-04-28 17:11:52] IA: Detecto mala energía. toma gua  es importante.
+
+[2026-04-28 17:12:26] Tú: sin ganas
+[2026-04-28 17:12:26] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:12:34] Tú: mysql 
+[2026-04-28 17:12:34] IA: Revisión:
+1. Tablas
+2. Columnas
+3. Migraciones
+4. Respaldos
+5. Consultas SQL
+
+[2026-04-28 17:12:37] Tú: tablas 
+[2026-04-28 17:12:37] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:15:33] Tú: sql
+[2026-04-28 17:15:33] IA: Revisión:
+1. Tablas
+2. Columnas
+3. Migraciones
+4. Respaldos
+5. Consultas SQL
+
+[2026-04-28 17:15:37] Tú: tabla
+[2026-04-28 17:15:37] IA: Cuéntame más para entender si es emoción, programación o base de datos.
+
+[2026-04-28 17:46:41] Tú: 8
+[2026-04-28 17:46:41] IA: Recomendación:
+Ordena el problema así:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-28 17:46:47] Tú: 4
+[2026-04-28 17:46:47] IA: Recomendación:
+Ordena el problema así:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-28 17:47:06] Tú: QUIERO LOGRARA UN  GIT COMMIT 
+[2026-04-28 17:47:06] IA: 📁 Proyecto: Diseño UI
+Para mejorar una vista:
+1. Orden visual
+2. Menos saturación
+3. Jerarquía clara
+4. Colores consistentes
+5. Espaciado uniforme
+
+🔄 Git: Git Commit
+Flujo recomendado:
+
+git status
+git add .
+git commit -m "feat: describir cambio"
+git push
+
+[2026-04-28 18:01:24] Tú: 12
+[2026-04-28 18:01:24] IA: Recomendación:
+Ordena el problema así:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-28 18:01:32] Tú: 12+3
+[2026-04-28 18:01:32] IA: Recomendación:
+Ordena el problema así:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-29 08:52:54] Tú: hola
+[2026-04-29 08:52:54] IA: Hola Areli. El entorno está configurado. ¿En qué módulo trabajamos hoy?
+
+[2026-04-29 08:53:04] Tú: tengo sueño
+[2026-04-29 08:53:04] IA: 💙 Emoción: Optimización Humana
+Tu cerebro es tu hardware más valioso. Si tiene poca batería, el código saldrá con errores. 
+Toma una siesta, hidrátate o estírate. El código seguirá aquí cuando vuelvas, y tú estarás más eficiente.
+
+[2026-04-29 08:57:22] Tú: y que eres que haces 
+[2026-04-29 08:57:22] IA: Recomendación:
+Ordena el problema así:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-29 08:57:36] Tú: horarios
+[2026-04-29 08:57:36] IA: ⏰ Horario: Cálculo de horario
+Puedo ayudarte a calcular horarios.
+
+Ejemplo:
+Si entras 8:30 y debes cumplir 9 horas 45 minutos:
+Salida aproximada: 6:15, considerando comida según tu regla.
+
+Escríbeme:
+'entré 8:30 y debo cumplir 9:45'
+
+[2026-04-29 08:57:46] Tú: entre 8:22
+[2026-04-29 08:57:46] IA: Recomendación:
+Ordena el problema así:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
