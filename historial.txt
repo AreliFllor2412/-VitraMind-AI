@@ -308,3 +308,54 @@ No te preocupes, Areli. Vamos a poner orden a esto juntas. Intentemos seguir est
 5. Qué resultado espero
 
 
+[2026-04-29 15:31:59] Tú: hola
+[2026-04-29 15:31:59] IA: ¡Hola Areli! Qué gusto verte por aquí. El sistema está listo y a tus órdenes. ¿Por dónde quieres que empecemos hoy?
+
+[2026-04-29 15:32:31] Tú: como estas?
+[2026-04-29 15:32:31] IA: Recomendación:
+No te preocupes, Areli. Vamos a poner orden a esto juntas. Intentemos seguir este camino:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-29 15:32:47] Tú: hacer  un commit
+[2026-04-29 15:32:47] IA: [1m🔄 Git[0m > [96mGit Commit[0m
+Flujo recomendado:
+¡Perfecto! Vamos a guardar esos avances. Este es el flujo que nunca falla:
+
+git status
+git add .
+git commit -m "feat: describir cambio"
+git push
+
+[2m──────────────────────────────────────────────────────────[0m
+
+[2026-04-29 15:32:57] Tú: git add
+[2026-04-29 15:32:57] IA: Recomendación:
+No te preocupes, Areli. Vamos a poner orden a esto juntas. Intentemos seguir este camino:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-29 15:33:03] Tú: mmmm
+[2026-04-29 15:33:03] IA: Recomendación:
+No te preocupes, Areli. Vamos a poner orden a esto juntas. Intentemos seguir este camino:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-29 15:42:26] Tú: hola
+[2026-04-29 15:42:26] IA: ¡Hola Areli! Qué gusto verte por aquí. El sistema está listo y a tus órdenes. ¿Por dónde quieres que empecemos hoy?
+
