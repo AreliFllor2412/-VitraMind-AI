@@ -3,6 +3,7 @@ def detectar_git(texto):
 
     if "pull" in texto:
         return "Git Pull", """Para traer cambios:
+¡Vamos a actualizar esa rama! Aquí tienes cómo traer lo último del remoto:
 
 git pull origin nombre-rama
 
@@ -12,6 +13,7 @@ git branch --set-upstream-to=origin/nombre-rama nombre-rama
 
     if "commit" in texto:
         return "Git Commit", """Flujo recomendado:
+¡Perfecto! Vamos a guardar esos avances. Este es el flujo que nunca falla:
 
 git status
 git add .
@@ -21,6 +23,7 @@ git push
 
     if "merge" in texto:
         return "Git Merge", """Para unir ramas:
+¡Hora de unir el código! Hazlo con cuidado:
 
 git checkout rama-destino
 git pull
@@ -29,6 +32,7 @@ git merge rama-origen
 
     if "rebase" in texto:
         return "Git Rebase", """Cuidado con rebase:
+El rebase es potente pero delicado, Areli. Si te sale algún conflicto:
 
 git status
 git rebase --continue

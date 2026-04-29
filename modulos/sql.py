@@ -3,6 +3,7 @@ def detectar_sql(texto):
 
     if "backup" in texto or "respaldo" in texto:
         return "Database Reliability", """Comando de respaldo profesional:
+¡Claro, Areli! Mantener los datos seguros es prioridad. Aquí tienes el comando para que duermas tranquila:
 
 mysqldump -u root -p nombre_base > backup.sql
 
@@ -12,15 +13,15 @@ mysqldump -u root -p --routines --triggers --events --single-transaction --datab
 
     if "migracion" in texto or "migration" in texto:
         return "Migraciones", """Revisa:
-1. Nombre de tabla
-2. Campos correctos
-3. Relaciones
-4. Llaves foráneas
-5. No usar migrate:fresh sin respaldo"""
+¡Ojo con las migraciones! Antes de darle al enter, dale una vuelta a esto:
+1. ¿El nombre de la tabla es el correcto?
+2. ¿Están todos los campos y sus tipos?
+3. ¿Las llaves foráneas tienen sentido?
+¡Y por favor, ni se te ocurra el migrate:fresh en producción sin un backup!"""
 
     if "consulta" in texto or "select" in texto:
         return "Consulta SQL", """Ejemplo base:
-SELECT * FROM usuarios;
+¿Buscando datos? Aquí tienes cómo hacer un SELECT que se vea limpio:
 
 Joins Profesionales:
 SELECT u.nombre, p.nombre_proyecto 
@@ -30,7 +31,7 @@ WHERE u.status = 'Activo';
 """
 
     if "optimizacion" in texto or "lento" in texto or "index" in texto:
-        return "Optimización SQL", """Tips de Rendimiento:
+        return "Optimización SQL", """¿La base de datos está lenta? Vamos a darle un boost de energía:
 
 1. Índices: CREATE INDEX idx_usuario_email ON usuarios(email);
 2. EXPLAIN: Usa 'EXPLAIN SELECT...' para ver cómo actúa el motor.
@@ -62,6 +63,23 @@ WHERE u.status = 'Activo';
 3. Privilegios: El usuario de la app no debe ser 'root'. Solo permisos necesarios (SELECT, INSERT, UPDATE).
 4. Encriptación: Hashea passwords con Argon2 o Bcrypt (nunca MD5).
 5. Auditoría: Implementa logs de quién modificó qué y cuándo.
+"""
+
+    if any(p in texto for p in ["escalabilidad", "sharding", "replicacion", "cluster"]):
+        return "Escalabilidad de Bases de Datos", """Estrategias Avanzadas:
+
+1. Replicación (Master-Slave/Master-Master): Mejora lectura y disponibilidad.
+2. Sharding (Particionamiento Horizontal): Distribuye datos en múltiples servidores.
+3. Load Balancing: Distribuye consultas entre réplicas o shards.
+4. Caching: Reduce la carga de la DB para datos frecuentemente accedidos.
+"""
+
+    if any(p in texto for p in ["cte", "window function", "subconsulta avanzada"]):
+        return "Optimización de Consultas Avanzadas", """Técnicas para Queries Complejas:
+
+1. CTEs (Common Table Expressions): Organiza consultas complejas y recursivas.
+2. Window Functions: Realiza cálculos sobre un conjunto de filas relacionadas (ej. RANK(), ROW_NUMBER(), LAG(), LEAD()).
+3. Subconsultas Correlacionadas: Útiles para comparar filas con un subconjunto de datos.
 """
     return None
 

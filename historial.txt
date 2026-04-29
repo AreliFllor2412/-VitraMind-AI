@@ -204,3 +204,107 @@ Ordena el problema así:
 5. Qué resultado espero
 
 
+[2026-04-29 09:55:46] Tú: que haces ?
+[2026-04-29 09:55:46] IA: Recomendación:
+Ordena el problema así:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-29 09:56:02] Tú: enojo
+[2026-04-29 09:56:02] IA: Recomendación:
+Ordena el problema así:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-29 09:56:05] Tú: 1
+[2026-04-29 09:56:05] IA: Recomendación:
+Ordena el problema así:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-29 09:56:05] Tú: 
+[2026-04-29 09:56:05] IA: Escribe algo para poder ayudarte.
+
+[2026-04-29 09:56:24] Tú: quiero hacer  un git commit
+[2026-04-29 09:56:24] IA: [1m🔄 Git[0m > [96mGit Commit[0m
+Flujo recomendado:
+
+git status
+git add .
+git commit -m "feat: describir cambio"
+git push
+
+[2m──────────────────────────────────────────────────────────[0m
+[1m📁 Proyecto[0m > [96mDiseño UI[0m
+Para mejorar una vista:
+1. Orden visual
+2. Menos saturación
+3. Jerarquía clara
+4. Colores consistentes
+5. Espaciado uniforme
+[2m──────────────────────────────────────────────────────────[0m
+
+[2026-04-29 09:56:30] Tú: diseño 
+[2026-04-29 09:56:30] IA: [1m💻 Programación[0m > [96mPatrones de Diseño GoF[0m
+Recomendaciones de implementación:
+
+1. Singleton: Para conexiones a DB o Logs.
+2. Factory: Para instanciar objetos complejos sin exponer lógica.
+3. Observer: Para sistemas de eventos y notificaciones.
+4. Strategy: Para cambiar algoritmos en tiempo de ejecución.
+5. Adapter: Para integrar interfaces incompatibles.
+
+[2m──────────────────────────────────────────────────────────[0m
+[1m📁 Proyecto[0m > [96mDiseño UI[0m
+Para mejorar una vista:
+1. Orden visual
+2. Menos saturación
+3. Jerarquía clara
+4. Colores consistentes
+5. Espaciado uniforme
+[2m──────────────────────────────────────────────────────────[0m
+
+[2026-04-29 09:56:40] Tú: 4 
+[2026-04-29 09:56:40] IA: Recomendación:
+Ordena el problema así:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+
+[2026-04-29 10:27:19] Tú: hola
+[2026-04-29 10:27:19] IA: ¡Hola Areli! Qué gusto verte por aquí. El sistema está listo y a tus órdenes. ¿Por dónde quieres que empecemos hoy?
+
+[2026-04-29 10:27:25] Tú: ayuda
+[2026-04-29 10:27:25] IA: Escríbeme de forma natural. Puedo ayudarte a debugear, optimizar SQL,
+gestionar tus ramas de Git o simplemente escucharte si el código te está estresando.
+
+[2026-04-29 10:27:33] Tú: que es   git
+[2026-04-29 10:27:33] IA: Recomendación:
+No te preocupes, Areli. Vamos a poner orden a esto juntas. Intentemos seguir este camino:
+
+1. Qué quiero lograr
+2. Qué tengo ahora
+3. Qué error aparece
+4. Qué archivo debo tocar
+5. Qué resultado espero
+
+

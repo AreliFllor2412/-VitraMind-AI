@@ -2,18 +2,18 @@ def detectar_emocion(texto):
     texto = texto.lower()
 
     if any(p in texto for p in ["estres", "estresada", "presion", "cansada", "agotada"]):
-        return "Gestión de Energía", "Entiendo perfectamente, Areli. El burnout es real en el desarrollo. \nSuelta el teclado 5 minutos, camina, hidrátate y recuerda: ningún bug es más importante que tu paz mental. Considera una técnica Pomodoro."
+        return "Gestión de Energía", "Te escucho, Areli. El burnout no es broma y el código puede esperar. \nSuelta el teclado 5 minutos, respira y estírate. Recuerda: eres una gran programadora, pero primero eres humana. ¡Tu paz mental es el mejor debug!"
 
     if any(p in texto for p in ["triste", "mal", "llorar", "sola"]):
-        return "Apoyo Personal", "Siento que te sientas así. A veces programar puede ser solitario. \nRecuerda que el código es solo una parte; tu bienestar es prioridad. Estoy aquí para procesar lo que necesites, no eres solo una programadora, eres humana."
+        return "Apoyo Personal", "Siento mucho que estés pasando por esto, Areli. \nA veces el mundo del dev se siente solitario, pero aquí estoy contigo. Tómate el tiempo que necesites; el código no define tu valor. Estoy aquí para lo que quieras contarme."
 
     if any(p in texto for p in ["enojada", "molesta", "frustrada", "coraje"]):
-        return "Foco en Crisis", "La frustración es el combustible del aprendizaje, Areli. \nEse error de Laravel o React va a caer. Respira profundo, vamos a revisarlo juntas paso a paso. A veces, un pequeño descanso y una nueva perspectiva lo resuelven."
+        return "Foco en Crisis", "¡Ese bug no va a poder contigo, Areli! \nSé que da coraje cuando las cosas no salen, pero esa frustración es solo señal de que estás a punto de aprender algo grande. Vamos a darle una vuelta juntas con calma."
 
     if any(p in texto for p in ["feliz", "contenta", "motivada", "bien", "excelente"]):
-        return "Peak Performance", "¡Esa es la actitud de una Senior, Areli! \nAprovecha este estado de 'flow' para resolver los tickets más complejos del backlog ahora mismo. ¡Mantén esa energía!"
+        return "Peak Performance", "¡Qué alegría leer eso, Areli! 🚀 \nEsa energía de 'Senior' es contagiosa. Aprovecha este momento de flow para conquistar esos retos que tenías pendientes. ¡A darle con todo!"
 
     if any(p in texto for p in ["sueño", "cansancio", "sin ganas", "agotada"]):
-        return "Optimización Humana", "Tu cerebro es tu hardware más valioso. Si tiene poca batería, el código saldrá con errores. \nToma una siesta, hidrátate o estírate. El código seguirá aquí cuando vuelvas, y tú estarás más eficiente."
+        return "Optimización Humana", "Tu cerebro es tu herramienta más potente, Areli, pero hasta los mejores servidores necesitan mantenimiento. \nSi tienes sueño, descansa un poco. Un café o una siesta corta harán que tu lógica brille mucho más después."
 
     return None

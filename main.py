@@ -12,7 +12,7 @@ from modulos.horarios import detectar_horario
 from modulos.prompts import detectar_prompt
 from modulos.sql import detectar_sql
 from modulos.devops import detectar_devops # Nuevo módulo
-from modulos.security import detectar_seguridad # Nuevo módulo de seguridad
+from security import detectar_seguridad # Corregido: security.py está en la raíz
 from modulos.tareas import detectar_tareas
 from modulos.calculadora import detectar_calculo
 from modulos.archivos import detectar_archivo
@@ -20,60 +20,55 @@ from modulos.texto import detectar_texto
 
 # Configuración de Estética Profesional
 class UI:
+    BLUE = '\033[94m'
     CYAN = '\033[96m'
     GREEN = '\033[92m'
     YELLOW = '\033[93m'
     RED = '\033[91m'
+    DIM = '\033[2m'
     BOLD = '\033[1m'
     RESET = '\033[0m'
-    BORDER = "◈" * 60
+    SEP = "━" * 60
 
 def limpiar():
     os.system("cls" if os.name == "nt" else "clear")
 
 def mostrar_inicio():
     limpiar()
-    print(f"{UI.CYAN}╔" + "═" * 78 + "╗")
-    print(f"║ {UI.BOLD}{NOMBRE_IA.center(76)}{UI.RESET}{UI.CYAN} ║")
-    print("╚" + "═" * 78 + f"╝{UI.RESET}")
-    print(f"\n{UI.GREEN}●{UI.RESET} {UI.BOLD}Status: Online{UI.RESET} | Bienvenida, Ingeniera {NOMBRE_USUARIO}.")
-    print(f"{UI.YELLOW}Sistemas de arquitectura y lógica listos para operar.{UI.RESET}\n")
-    
-    menu = [
-        "1. Mindset & Emociones", "2. Core Programming", "3. Database Engine",
-        "4. Fullstack Ecosystem", "5. Project Management", "6. UI/UX Strategy",
-        "7. Data Reporting", "8. Version Control (Git)", "9. Schedule Ops",
-        "10. Advanced Prompts", "11. Backlog/Tareas", "12. Engineering Calc", "13. DevOps & Infra", "14. CyberSecurity"
-    ]
-    
-    for i in range(0, len(menu), 2):
-        col1 = menu[i].ljust(35)
-        col2 = menu[i+1] if i+1 < len(menu) else ""
-        print(f"   {col1} {col2}")
+    print(f"{UI.BLUE}┏" + "━" * 78 + "┓")
+    print(f"┃ {UI.BOLD}{NOMBRE_IA.center(76)}{UI.RESET}{UI.BLUE} ┃")
+    print(f"┗" + "━" * 78 + f"┛{UI.RESET}")
+    print(f"\n {UI.GREEN}✔{UI.RESET} {UI.BOLD}System Online{UI.RESET} | User: {UI.CYAN}{NOMBRE_USUARIO}{UI.RESET}")
+    print(f" {UI.DIM}Engineering Toolset v2.5 cargado.{UI.RESET}\n")
 
-    print(f"\n{UI.CYAN}{'━' * 80}{UI.RESET}")
-    print(f"{UI.YELLOW}Comandos rápidos:{UI.RESET} ayuda | memoria | limpiar | salir")
-    print(f"{UI.CYAN}{'━' * 80}{UI.RESET}")
+    categorias = {
+        "Soft Skills & Management": ["Mindset & Emociones", "Schedule Ops", "Backlog/Tareas"],
+        "Backend & DB Engine": ["Core Programming", "Database Engine", "DevOps & Infra"],
+        "Security & Engineering": ["CyberSecurity", "Advanced Prompts", "Engineering Calc"],
+        "Frontend & Workflow": ["Fullstack Ecosystem", "UI/UX Strategy", "Version Control (Git)"]
+    }
+
+    for cat, items in categorias.items():
+        print(f"  {UI.BOLD}{UI.BLUE}📂 {cat}{UI.RESET}")
+        for i in range(0, len(items), 2):
+            col1 = f"{UI.DIM}•{UI.RESET} {items[i]}".ljust(45)
+            col2 = f"{UI.DIM}•{UI.RESET} {items[i+1]}" if i+1 < len(items) else ""
+            print(f"     {col1} {col2}")
+        print()
+
+    print(f"{UI.BLUE}{'━' * 80}{UI.RESET}")
+    print(f" {UI.YELLOW}HINT:{UI.RESET} {UI.DIM}ayuda | memoria | limpiar | salir{UI.RESET}")
+    print(f"{UI.BLUE}{'━' * 80}{UI.RESET}")
 
 def mostrar_panel(titulo, contenido):
-    print(f"\n{UI.CYAN}{UI.BORDER}")
-    print(f"  {UI.BOLD}{UI.GREEN}⚡ {titulo.upper()}{UI.RESET}")
-    print(f"{UI.CYAN}{UI.BORDER}{UI.RESET}")
-    print(f"{UI.BOLD}{contenido}{UI.RESET}")
-    print(f"{UI.CYAN}{UI.BORDER}{UI.RESET}\n")
+    print(f"\n{UI.CYAN}{UI.BOLD}⚡ {titulo.upper()}{UI.RESET}")
+    print(f"{UI.CYAN}{UI.SEP}{UI.RESET}")
+    for linea in contenido.split('\n'):
+        print(f"{UI.CYAN}┃{UI.RESET} {linea}")
+    print(f"{UI.CYAN}{UI.SEP}{UI.RESET}\n")
 
 def ayuda():
     return "Escríbeme de forma natural. Puedo ayudarte a debugear, optimizar SQL,\ngestionar tus ramas de Git o simplemente escucharte si el código te está estresando."
-
-
-def agregar_respuesta(respuestas, etiqueta, resultado):
-    """
-    Cada módulo debe regresar:
-    ("Título", "Respuesta")
-    """
-    if resultado:
-        respuestas.append((etiqueta, resultado))
-
 
 def responder(texto):
     texto_limpio = texto.strip().lower()
@@ -88,9 +83,8 @@ def responder(texto):
         return "🧠 Memoria", ver_memoria()
 
     respuestas = []
-    
-    # Sistema de registro dinámico para evitar código repetitivo
     modulos = [
+    
         ("💙 Emoción", detectar_emocion),
         ("💻 Programación", detectar_programacion),
         ("🗄️ SQL", detectar_sql),
@@ -116,12 +110,14 @@ def responder(texto):
 
         for area, dato in respuestas:
             titulo_area, respuesta_area = dato
-            contenido += f"{area}: {titulo_area}\n{respuesta_area}\n\n"
+            contenido += f"{UI.BOLD}{area}{UI.RESET} > {UI.CYAN}{titulo_area}{UI.RESET}\n"
+            contenido += f"{respuesta_area}\n"
+            contenido += f"{UI.DIM}{'─' * 58}{UI.RESET}\n"
 
         return "🤖 Respuesta avanzada", contenido.strip()
 
     if "hola" in texto_limpio:
-        return "👋 Saludo", f"Hola Areli. El entorno está configurado. ¿En qué módulo trabajamos hoy?"
+        return "👋 Saludo", f"¡Hola Areli! Qué gusto verte por aquí. El sistema está listo y a tus órdenes. ¿Por dónde quieres que empecemos hoy?"
 
     return "🤖 Recomendación general", recomendacion_general()
 
@@ -129,7 +125,7 @@ def responder(texto):
 mostrar_inicio()
 
 while True:
-    mensaje = input(f"{UI.GREEN}Areli@DevShell{UI.RESET}:~$ ")
+    mensaje = input(f"{UI.GREEN}➜ {UI.BOLD}{NOMBRE_USUARIO}@DevShell{UI.RESET} {UI.DIM}$ {UI.RESET}")
 
     if mensaje.lower().strip() == "salir":
         print(f"\n{UI.YELLOW}Cerrando sesión. Código guardado. ¡Hasta luego, Areli!{UI.RESET}")
