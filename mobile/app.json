@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "VitraMind AI",
+    "slug": "vitramind-ai",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F5F1E8"
+      }
+    }
+  }
+}

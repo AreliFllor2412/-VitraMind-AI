@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+mobile/node_modules/
+.expo/
+mobile/.expo/
