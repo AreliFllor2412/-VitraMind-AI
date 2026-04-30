@@ -14,7 +14,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import { QUICK_AREAS, SUGGESTIONS, respond } from "./src/assistant";
+import { FEATURE_IDEAS, QUICK_AREAS, SUGGESTIONS, USER_MODES, respond } from "./src/assistant";
 
 const INITIAL_MESSAGES = [
   {
@@ -22,7 +22,7 @@ const INITIAL_MESSAGES = [
     role: "assistant",
     area: "Inicio",
     title: "Lista para ayudarte",
-    text: "Hola, Areli. Soy tu asistente para codigo, tareas, seguridad, SQL, Git y calma mental cuando el bug se pone intenso. Escribeme como hablas normalmente y yo lo ordeno contigo.",
+    text: "Hola, Areli. Soy tu asistente para codigo, tareas, seguridad, SQL, Git y calma mental cuando el bug se pone intenso. No tienes que escribir perfecto; hablame como te salga y yo lo acomodo contigo.",
   },
 ];
 
@@ -43,6 +43,24 @@ function MessageBubble({ message }) {
           </View>
         )}
         <Text style={[styles.messageText, isUser && styles.userMessageText]}>{message.text}</Text>
+        {!isUser && message.insights?.length > 0 && (
+          <View style={styles.insightChips}>
+            {message.insights.map((item) => (
+              <View key={item} style={styles.insightChip}>
+                <Text style={styles.insightChipText}>{item}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+        {!isUser && message.actions?.length > 0 && (
+          <View style={styles.actionList}>
+            {message.actions.map((action) => (
+              <View key={action} style={styles.actionPill}>
+                <Text style={styles.actionPillText}>{action}</Text>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
     </View>
   );
@@ -56,13 +74,23 @@ function QuickChip({ label, onPress }) {
   );
 }
 
-function InsightPanel({ count, onSuggestion }) {
+function ModeChip({ mode, active, onPress }) {
+  return (
+    <Pressable style={({ pressed }) => [styles.modeChip, active && styles.modeChipActive, pressed && styles.pressed]} onPress={onPress}>
+      <Text style={[styles.modeChipText, active && styles.modeChipTextActive]}>{mode.label}</Text>
+    </Pressable>
+  );
+}
+
+function InsightPanel({ count, selectedMode, onModeChange, onSuggestion }) {
+  const currentMode = USER_MODES.find((mode) => mode.id === selectedMode) || USER_MODES[0];
+
   return (
     <View style={styles.insightPanel}>
       <Text style={styles.insightEyebrow}>Centro de mando</Text>
-      <Text style={styles.insightTitle}>Preguntame sin pena, aunque vaya con dedazos.</Text>
+      <Text style={styles.insightTitle}>Preguntame sin pena, aunque venga con dedazos.</Text>
       <Text style={styles.insightCopy}>
-        Yo intento detectar intencion, tema y siguiente paso. Si falta contexto, te lo pido sin hacerte perder tiempo.
+        Quiero sonar mas humana: si vienes cansada, te doy pasos suaves; si vienes con prisa, voy directo; si vienes con una idea, la ordeno.
       </Text>
 
       <View style={styles.metricRow}>
@@ -76,6 +104,19 @@ function InsightPanel({ count, onSuggestion }) {
         </View>
       </View>
 
+      <Text style={styles.insightSectionTitle}>Modo de respuesta</Text>
+      <View style={styles.modeWrap}>
+        {USER_MODES.map((mode) => (
+          <ModeChip
+            key={mode.id}
+            mode={mode}
+            active={mode.id === selectedMode}
+            onPress={() => onModeChange(mode.id)}
+          />
+        ))}
+      </View>
+      <Text style={styles.modeDescription}>{currentMode.description}</Text>
+
       <Text style={styles.insightSectionTitle}>Prueba esto</Text>
       {SUGGESTIONS.slice(0, 3).map((suggestion) => (
         <Pressable
@@ -86,6 +127,13 @@ function InsightPanel({ count, onSuggestion }) {
           <Text style={styles.sideSuggestionText}>{suggestion}</Text>
         </Pressable>
       ))}
+
+      <Text style={styles.insightSectionTitle}>Podemos agregar</Text>
+      {FEATURE_IDEAS.slice(0, 3).map((idea) => (
+        <View key={idea} style={styles.ideaItem}>
+          <Text style={styles.ideaText}>{idea}</Text>
+        </View>
+      ))}
     </View>
   );
 }
@@ -93,6 +141,7 @@ function InsightPanel({ count, onSuggestion }) {
 export default function App() {
   const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const [input, setInput] = useState("");
+  const [selectedMode, setSelectedMode] = useState("normal");
   const scrollRef = useRef(null);
   const { width } = useWindowDimensions();
   const isWide = width >= 900;
@@ -115,7 +164,7 @@ export default function App() {
       text,
     };
 
-    const assistantResponse = respond(text, [...messages, userMessage]);
+    const assistantResponse = respond(text, [...messages, userMessage], selectedMode);
     const assistantMessage = {
       id: createId(),
       role: "assistant",
@@ -150,7 +199,14 @@ export default function App() {
         </View>
 
         <View style={[styles.workspace, isWide && styles.workspaceWide]}>
-          {isWide && <InsightPanel count={userMessagesCount} onSuggestion={sendMessage} />}
+          {isWide && (
+            <InsightPanel
+              count={userMessagesCount}
+              selectedMode={selectedMode}
+              onModeChange={setSelectedMode}
+              onSuggestion={sendMessage}
+            />
+          )}
 
           <View style={styles.chatShell}>
             <View style={styles.statusBand}>
@@ -163,7 +219,25 @@ export default function App() {
                 <Text style={styles.statusLabel}>Contexto</Text>
                 <Text style={styles.statusValue}>{userMessagesCount} mensajes</Text>
               </View>
+              <View style={styles.statusDivider} />
+              <View>
+                <Text style={styles.statusLabel}>Tono</Text>
+                <Text style={styles.statusValue}>{USER_MODES.find((mode) => mode.id === selectedMode)?.label}</Text>
+              </View>
             </View>
+
+            {!isWide && (
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.modeArea}>
+                {USER_MODES.map((mode) => (
+                  <ModeChip
+                    key={mode.id}
+                    mode={mode}
+                    active={mode.id === selectedMode}
+                    onPress={() => setSelectedMode(mode.id)}
+                  />
+                ))}
+              </ScrollView>
+            )}
 
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickArea}>
               {QUICK_AREAS.map((area) => (
@@ -192,6 +266,13 @@ export default function App() {
                     >
                       <Text style={styles.suggestionText}>{suggestion}</Text>
                     </Pressable>
+                  ))}
+
+                  <Text style={styles.suggestionTitleAlt}>Que podemos agregar</Text>
+                  {FEATURE_IDEAS.slice(0, 4).map((idea) => (
+                    <View key={idea} style={styles.mobileIdeaItem}>
+                      <Text style={styles.mobileIdeaText}>{idea}</Text>
+                    </View>
                   ))}
                 </View>
               )}
@@ -295,6 +376,11 @@ const styles = StyleSheet.create({
     marginTop: 12,
     maxHeight: 40,
   },
+  modeArea: {
+    flexGrow: 0,
+    marginTop: 10,
+    maxHeight: 38,
+  },
   quickChip: {
     alignItems: "center",
     backgroundColor: "#E8F5F3",
@@ -369,6 +455,46 @@ const styles = StyleSheet.create({
   userMessageText: {
     color: "#FFFFFF",
     fontWeight: "700",
+  },
+  insightChips: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+    marginTop: 12,
+  },
+  insightChip: {
+    backgroundColor: "#EEF7F5",
+    borderColor: "#C4E4DF",
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+  },
+  insightChipText: {
+    color: "#0F766E",
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 0,
+  },
+  actionList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 7,
+    marginTop: 9,
+  },
+  actionPill: {
+    backgroundColor: "#FFF3ED",
+    borderColor: "#F3C5B2",
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingHorizontal: 9,
+    paddingVertical: 6,
+  },
+  actionPillText: {
+    color: "#B94924",
+    fontSize: 12,
+    fontWeight: "900",
+    letterSpacing: 0,
   },
   suggestionPanel: {
     borderColor: "#DCE3EA",
@@ -545,6 +671,82 @@ const styles = StyleSheet.create({
     color: "#EEF3F8",
     fontSize: 13,
     fontWeight: "800",
+    letterSpacing: 0,
+    lineHeight: 18,
+  },
+  modeWrap: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginTop: 10,
+  },
+  modeChip: {
+    backgroundColor: "#242B38",
+    borderColor: "#354154",
+    borderRadius: 8,
+    borderWidth: 1,
+    height: 32,
+    justifyContent: "center",
+    paddingHorizontal: 10,
+  },
+  modeChipActive: {
+    backgroundColor: "#66D3C7",
+    borderColor: "#66D3C7",
+  },
+  modeChipText: {
+    color: "#DDE6F0",
+    fontSize: 12,
+    fontWeight: "900",
+    letterSpacing: 0,
+  },
+  modeChipTextActive: {
+    color: "#10201E",
+  },
+  modeDescription: {
+    color: "#B8C5D4",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0,
+    lineHeight: 17,
+    marginTop: 8,
+  },
+  ideaItem: {
+    backgroundColor: "#18202C",
+    borderLeftColor: "#D65A31",
+    borderLeftWidth: 3,
+    borderRadius: 8,
+    marginTop: 9,
+    paddingHorizontal: 11,
+    paddingVertical: 10,
+  },
+  ideaText: {
+    color: "#DDE6F0",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0,
+    lineHeight: 17,
+  },
+  suggestionTitleAlt: {
+    color: "#141821",
+    fontSize: 14,
+    fontWeight: "900",
+    letterSpacing: 0,
+    marginBottom: 8,
+    marginTop: 16,
+  },
+  mobileIdeaItem: {
+    backgroundColor: "#F0F5FA",
+    borderColor: "#DCE3EA",
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  mobileIdeaText: {
+    color: "#2D3440",
+    fontSize: 13,
+    fontWeight: "700",
     letterSpacing: 0,
     lineHeight: 18,
   },

@@ -6,9 +6,13 @@ Asistente inteligente en Python para Areli, pensado para trabajo diario de progr
 
 - Entiende texto con o sin acentos gracias a normalizacion de entrada.
 - Detecta intencion: pregunta, peticion, accion, conversacion o debugging.
+- Corrige dedazos comunes como `ahcer`, `poryecto`, `poidemos`, `werb`.
+- Detecta energia: normal, cansada, focus o creativa.
+- Detecta formato esperado: corto, ejemplo, codigo, plan o acompanado.
 - Prioriza respuestas por modulo para evitar ruido.
 - Agrega diagnostico rapido cuando detecta errores.
 - Tiene una version movil en React Native con interfaz de chat.
+- Muestra etiquetas de entendimiento y acciones sugeridas en cada respuesta.
 - Usa memoria de sesion para mostrar contexto reciente.
 - Guarda historial en `historial.txt`.
 - Maneja tareas, notas, resumenes, calculos, Git, SQL, DevOps, seguridad y soporte emocional.
@@ -81,6 +85,9 @@ La app movil vive en `mobile/`. Incluye:
 - Respuestas mas humanas.
 - Accesos rapidos por area.
 - Contexto reciente de conversacion.
+- Selector de tono: Normal, Cansada, Focus y Creativa.
+- Panel de entendimiento: tema, energia y formato detectado.
+- Acciones sugeridas despues de cada respuesta.
 - Motor local en JavaScript.
 
 Para iniciarla:
