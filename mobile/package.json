@@ -11,9 +11,12 @@
     "check": "node --check src/assistant.js"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~5.0.5",
     "expo": "~53.0.0",
     "react": "19.0.0",
-    "react-native": "0.79.0"
+    "react-dom": "19.0.0",
+    "react-native": "0.79.0",
+    "react-native-web": "^0.20.0"
   },
   "devDependencies": {}
 }

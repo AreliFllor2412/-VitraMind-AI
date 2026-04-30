@@ -1,3 +1,4 @@
+
 import { useMemo, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -10,6 +11,7 @@ import {
   Text,
   TextInput,
   View,
+  useWindowDimensions,
 } from "react-native";
 
 import { QUICK_AREAS, SUGGESTIONS, respond } from "./src/assistant";
@@ -54,10 +56,46 @@ function QuickChip({ label, onPress }) {
   );
 }
 
+function InsightPanel({ count, onSuggestion }) {
+  return (
+    <View style={styles.insightPanel}>
+      <Text style={styles.insightEyebrow}>Centro de mando</Text>
+      <Text style={styles.insightTitle}>Preguntame sin pena, aunque vaya con dedazos.</Text>
+      <Text style={styles.insightCopy}>
+        Yo intento detectar intencion, tema y siguiente paso. Si falta contexto, te lo pido sin hacerte perder tiempo.
+      </Text>
+
+      <View style={styles.metricRow}>
+        <View style={styles.metricBox}>
+          <Text style={styles.metricValue}>{count}</Text>
+          <Text style={styles.metricLabel}>mensajes</Text>
+        </View>
+        <View style={styles.metricBoxAlt}>
+          <Text style={styles.metricValueAlt}>3</Text>
+          <Text style={styles.metricLabelAlt}>pasos claros</Text>
+        </View>
+      </View>
+
+      <Text style={styles.insightSectionTitle}>Prueba esto</Text>
+      {SUGGESTIONS.slice(0, 3).map((suggestion) => (
+        <Pressable
+          key={suggestion}
+          style={({ pressed }) => [styles.sideSuggestion, pressed && styles.pressed]}
+          onPress={() => onSuggestion(suggestion)}
+        >
+          <Text style={styles.sideSuggestionText}>{suggestion}</Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+
 export default function App() {
   const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const [input, setInput] = useState("");
   const scrollRef = useRef(null);
+  const { width } = useWindowDimensions();
+  const isWide = width >= 900;
 
   const userMessagesCount = useMemo(
     () => messages.filter((message) => message.role === "user").length,
@@ -96,7 +134,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F5F1E8" />
+      <StatusBar barStyle="dark-content" backgroundColor="#F6F8FB" />
       <KeyboardAvoidingView
         style={styles.screen}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -111,62 +149,68 @@ export default function App() {
           </Pressable>
         </View>
 
-        <View style={styles.statusBand}>
-          <View>
-            <Text style={styles.statusLabel}>Modo</Text>
-            <Text style={styles.statusValue}>Humano y tecnico</Text>
-          </View>
-          <View style={styles.statusDivider} />
-          <View>
-            <Text style={styles.statusLabel}>Contexto</Text>
-            <Text style={styles.statusValue}>{userMessagesCount} mensajes</Text>
-          </View>
-        </View>
+        <View style={[styles.workspace, isWide && styles.workspaceWide]}>
+          {isWide && <InsightPanel count={userMessagesCount} onSuggestion={sendMessage} />}
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickArea}>
-          {QUICK_AREAS.map((area) => (
-            <QuickChip key={area} label={area} onPress={() => sendMessage(`Ayudame con ${area}`)} />
-          ))}
-        </ScrollView>
-
-        <ScrollView
-          ref={scrollRef}
-          style={styles.chat}
-          contentContainerStyle={styles.chatContent}
-          showsVerticalScrollIndicator={false}
-        >
-          {messages.map((message) => (
-            <MessageBubble key={message.id} message={message} />
-          ))}
-
-          {messages.length === 1 && (
-            <View style={styles.suggestionPanel}>
-              <Text style={styles.suggestionTitle}>Ideas para empezar</Text>
-              {SUGGESTIONS.map((suggestion) => (
-                <Pressable
-                  key={suggestion}
-                  style={({ pressed }) => [styles.suggestionButton, pressed && styles.pressed]}
-                  onPress={() => sendMessage(suggestion)}
-                >
-                  <Text style={styles.suggestionText}>{suggestion}</Text>
-                </Pressable>
-              ))}
+          <View style={styles.chatShell}>
+            <View style={styles.statusBand}>
+              <View>
+                <Text style={styles.statusLabel}>Modo</Text>
+                <Text style={styles.statusValue}>Humano y tecnico</Text>
+              </View>
+              <View style={styles.statusDivider} />
+              <View>
+                <Text style={styles.statusLabel}>Contexto</Text>
+                <Text style={styles.statusValue}>{userMessagesCount} mensajes</Text>
+              </View>
             </View>
-          )}
-        </ScrollView>
 
-        <View style={styles.composer}>
-          <TextInput
-            style={styles.input}
-            value={input}
-            onChangeText={setInput}
-            placeholder="Escribe tu duda, error o idea..."
-            placeholderTextColor="#7B776D"
-            multiline
-          />
-          <Pressable style={({ pressed }) => [styles.sendButton, pressed && styles.pressed]} onPress={() => sendMessage()}>
-            <Text style={styles.sendButtonText}>Enviar</Text>
-          </Pressable>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickArea}>
+              {QUICK_AREAS.map((area) => (
+                <QuickChip key={area} label={area} onPress={() => sendMessage(`Ayudame con ${area}`)} />
+              ))}
+            </ScrollView>
+
+            <ScrollView
+              ref={scrollRef}
+              style={styles.chat}
+              contentContainerStyle={styles.chatContent}
+              showsVerticalScrollIndicator={false}
+            >
+              {messages.map((message) => (
+                <MessageBubble key={message.id} message={message} />
+              ))}
+
+              {messages.length === 1 && !isWide && (
+                <View style={styles.suggestionPanel}>
+                  <Text style={styles.suggestionTitle}>Ideas para empezar</Text>
+                  {SUGGESTIONS.map((suggestion) => (
+                    <Pressable
+                      key={suggestion}
+                      style={({ pressed }) => [styles.suggestionButton, pressed && styles.pressed]}
+                      onPress={() => sendMessage(suggestion)}
+                    >
+                      <Text style={styles.suggestionText}>{suggestion}</Text>
+                    </Pressable>
+                  ))}
+                </View>
+              )}
+            </ScrollView>
+
+            <View style={styles.composer}>
+              <TextInput
+                style={styles.input}
+                value={input}
+                onChangeText={setInput}
+                placeholder="Escribe tu duda, error o idea..."
+                placeholderTextColor="#6F7480"
+                multiline
+              />
+              <Pressable style={({ pressed }) => [styles.sendButton, pressed && styles.pressed]} onPress={() => sendMessage()}>
+                <Text style={styles.sendButtonText}>Enviar</Text>
+              </Pressable>
+            </View>
+          </View>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -176,7 +220,7 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#F5F1E8",
+    backgroundColor: "#F6F8FB",
   },
   screen: {
     flex: 1,
@@ -190,14 +234,14 @@ const styles = StyleSheet.create({
     paddingBottom: 14,
   },
   eyebrow: {
-    color: "#527A64",
+    color: "#0F766E",
     fontSize: 12,
     fontWeight: "800",
     letterSpacing: 0,
     textTransform: "uppercase",
   },
   heading: {
-    color: "#25231F",
+    color: "#141821",
     fontSize: 24,
     fontWeight: "800",
     letterSpacing: 0,
@@ -205,7 +249,7 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     alignItems: "center",
-    backgroundColor: "#25231F",
+    backgroundColor: "#141821",
     borderRadius: 8,
     height: 42,
     justifyContent: "center",
@@ -220,7 +264,7 @@ const styles = StyleSheet.create({
   statusBand: {
     alignItems: "center",
     backgroundColor: "#FFFFFF",
-    borderColor: "#E0D8C8",
+    borderColor: "#DCE3EA",
     borderRadius: 8,
     borderWidth: 1,
     flexDirection: "row",
@@ -229,20 +273,20 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   statusLabel: {
-    color: "#7B776D",
+    color: "#6F7480",
     fontSize: 12,
     fontWeight: "700",
     letterSpacing: 0,
   },
   statusValue: {
-    color: "#25231F",
+    color: "#141821",
     fontSize: 14,
     fontWeight: "800",
     letterSpacing: 0,
     marginTop: 2,
   },
   statusDivider: {
-    backgroundColor: "#E0D8C8",
+    backgroundColor: "#DCE3EA",
     height: 32,
     width: 1,
   },
@@ -253,8 +297,8 @@ const styles = StyleSheet.create({
   },
   quickChip: {
     alignItems: "center",
-    backgroundColor: "#EAF3EE",
-    borderColor: "#B8D5C5",
+    backgroundColor: "#E8F5F3",
+    borderColor: "#A9D9D2",
     borderRadius: 8,
     borderWidth: 1,
     height: 36,
@@ -263,7 +307,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   quickChipText: {
-    color: "#315D47",
+    color: "#0F766E",
     fontSize: 13,
     fontWeight: "800",
     letterSpacing: 0,
@@ -290,34 +334,34 @@ const styles = StyleSheet.create({
   },
   assistantBubble: {
     backgroundColor: "#FFFFFF",
-    borderColor: "#E0D8C8",
+    borderColor: "#DCE3EA",
     borderWidth: 1,
   },
   userBubble: {
-    backgroundColor: "#315D47",
+    backgroundColor: "#2447A3",
   },
   messageMeta: {
-    borderBottomColor: "#EEE8DC",
+    borderBottomColor: "#E8EDF3",
     borderBottomWidth: 1,
     marginBottom: 8,
     paddingBottom: 7,
   },
   areaText: {
-    color: "#B85C38",
+    color: "#D65A31",
     fontSize: 11,
     fontWeight: "900",
     letterSpacing: 0,
     textTransform: "uppercase",
   },
   titleText: {
-    color: "#25231F",
+    color: "#141821",
     fontSize: 15,
     fontWeight: "900",
     letterSpacing: 0,
     marginTop: 2,
   },
   messageText: {
-    color: "#38342D",
+    color: "#2D3440",
     fontSize: 15,
     letterSpacing: 0,
     lineHeight: 22,
@@ -327,14 +371,14 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   suggestionPanel: {
-    borderColor: "#E0D8C8",
+    borderColor: "#DCE3EA",
     borderRadius: 8,
     borderWidth: 1,
     marginTop: 8,
     padding: 12,
   },
   suggestionTitle: {
-    color: "#25231F",
+    color: "#141821",
     fontSize: 14,
     fontWeight: "900",
     letterSpacing: 0,
@@ -342,7 +386,7 @@ const styles = StyleSheet.create({
   },
   suggestionButton: {
     backgroundColor: "#FFFFFF",
-    borderColor: "#E0D8C8",
+    borderColor: "#DCE3EA",
     borderRadius: 8,
     borderWidth: 1,
     marginTop: 8,
@@ -350,15 +394,15 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   suggestionText: {
-    color: "#38342D",
+    color: "#2D3440",
     fontSize: 14,
     fontWeight: "700",
     letterSpacing: 0,
   },
   composer: {
     alignItems: "flex-end",
-    backgroundColor: "#F5F1E8",
-    borderTopColor: "#E0D8C8",
+    backgroundColor: "#F6F8FB",
+    borderTopColor: "#DCE3EA",
     borderTopWidth: 1,
     flexDirection: "row",
     gap: 10,
@@ -367,10 +411,10 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "#FFFFFF",
-    borderColor: "#D8CDBA",
+    borderColor: "#C9D3DF",
     borderRadius: 8,
     borderWidth: 1,
-    color: "#25231F",
+    color: "#141821",
     flex: 1,
     fontSize: 15,
     letterSpacing: 0,
@@ -381,7 +425,7 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     alignItems: "center",
-    backgroundColor: "#B85C38",
+    backgroundColor: "#D65A31",
     borderRadius: 8,
     height: 46,
     justifyContent: "center",
@@ -395,5 +439,113 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.72,
+  },
+  workspace: {
+    flex: 1,
+  },
+  workspaceWide: {
+    alignSelf: "center",
+    flexDirection: "row",
+    gap: 16,
+    maxWidth: 1160,
+    width: "100%",
+  },
+  chatShell: {
+    flex: 1,
+  },
+  insightPanel: {
+    backgroundColor: "#141821",
+    borderRadius: 8,
+    marginTop: 0,
+    padding: 18,
+    width: 320,
+  },
+  insightEyebrow: {
+    color: "#66D3C7",
+    fontSize: 12,
+    fontWeight: "900",
+    letterSpacing: 0,
+    textTransform: "uppercase",
+  },
+  insightTitle: {
+    color: "#FFFFFF",
+    fontSize: 23,
+    fontWeight: "900",
+    letterSpacing: 0,
+    lineHeight: 29,
+    marginTop: 8,
+  },
+  insightCopy: {
+    color: "#C6D1DF",
+    fontSize: 14,
+    letterSpacing: 0,
+    lineHeight: 21,
+    marginTop: 10,
+  },
+  metricRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 18,
+  },
+  metricBox: {
+    backgroundColor: "#2447A3",
+    borderRadius: 8,
+    flex: 1,
+    padding: 12,
+  },
+  metricBoxAlt: {
+    backgroundColor: "#0F766E",
+    borderRadius: 8,
+    flex: 1,
+    padding: 12,
+  },
+  metricValue: {
+    color: "#FFFFFF",
+    fontSize: 24,
+    fontWeight: "900",
+    letterSpacing: 0,
+  },
+  metricValueAlt: {
+    color: "#FFFFFF",
+    fontSize: 24,
+    fontWeight: "900",
+    letterSpacing: 0,
+  },
+  metricLabel: {
+    color: "#D9E2F2",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0,
+    marginTop: 2,
+  },
+  metricLabelAlt: {
+    color: "#D9F2EE",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0,
+    marginTop: 2,
+  },
+  insightSectionTitle: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "900",
+    letterSpacing: 0,
+    marginTop: 22,
+  },
+  sideSuggestion: {
+    backgroundColor: "#242B38",
+    borderColor: "#354154",
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: 9,
+    paddingHorizontal: 12,
+    paddingVertical: 11,
+  },
+  sideSuggestionText: {
+    color: "#EEF3F8",
+    fontSize: 13,
+    fontWeight: "800",
+    letterSpacing: 0,
+    lineHeight: 18,
   },
 });

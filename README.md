@@ -90,3 +90,16 @@ cd mobile
 npm install
 npm run start
 ```
+
+Para verla en navegador web:
+
+```bash
+cd mobile
+npm.cmd run web -- --host localhost --port 8083
+```
+
+Abre:
+
+```txt
+http://localhost:8083
+```

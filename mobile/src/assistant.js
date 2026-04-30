@@ -16,12 +16,36 @@ const SUGGESTIONS = [
   "Necesito mejorar una pantalla",
 ];
 
+const TYPO_FIXES = [
+  ["ahcer", "hacer"],
+  ["aser", "hacer"],
+  ["ouedo", "puedo"],
+  ["pudeo", "puedo"],
+  ["pregu8ntas", "preguntas"],
+  ["preg8ntas", "preguntas"],
+  ["werb", "web"],
+  ["reac native", "react native"],
+  ["condiseno", "con diseno"],
+  ["dise;o", "diseno"],
+  ["qiero", "quiero"],
+  ["nesecito", "necesito"],
+  ["alluda", "ayuda"],
+];
+
 function normalize(text) {
-  return text
+  let clean = text
     .trim()
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[¿?¡!.,;:]+/g, " ")
+    .replace(/\s+/g, " ");
+
+  TYPO_FIXES.forEach(([from, to]) => {
+    clean = clean.replace(new RegExp(`\\b${from}\\b`, "g"), to);
+  });
+
+  return clean;
 }
 
 function hasAny(text, words) {
@@ -35,11 +59,11 @@ function detectIntent(text) {
     return "debug";
   }
 
-  if (hasAny(clean, ["quiero", "necesito", "ayudame", "puedes", "hazme", "mejora"])) {
+  if (hasAny(clean, ["quiero", "necesito", "ayudame", "puedes", "hazme", "mejora", "mejoralo"])) {
     return "request";
   }
 
-  if (clean.endsWith("?") || clean.startsWith("como ") || clean.startsWith("que ")) {
+  if (clean.startsWith("como ") || clean.startsWith("que ") || clean.startsWith("dime ")) {
     return "question";
   }
 
@@ -52,7 +76,7 @@ function humanOpening(intent) {
   }
 
   if (intent === "request") {
-    return "Si, Areli. Lo aterrizo contigo en pasos claros para que no se sienta enorme.";
+    return "Si, Areli. Capte la idea aunque venga rapido; la aterrizo contigo en pasos claros.";
   }
 
   if (intent === "question") {
@@ -63,6 +87,40 @@ function humanOpening(intent) {
 }
 
 const modules = [
+  {
+    area: "Como preguntar",
+    score: 100,
+    match: (text) => hasAny(text, ["pregunta", "preguntas", "como pregunto", "como hago preguntas"]),
+    reply: () => ({
+      title: "Pregunta potente",
+      body: [
+        "Tu forma natural esta bien. Para que yo te responda mejor, usa esta mini formula:",
+        "1. Que quieres lograr.",
+        "2. Que tienes ahora.",
+        "3. Que no esta saliendo.",
+        "4. Donde pasa: archivo, pantalla o comando.",
+        "5. Que resultado esperas.",
+        "",
+        "Ejemplo: `Quiero hacer login en React Native, ya tengo la pantalla, pero el token no se guarda. Que reviso?`",
+      ].join("\n"),
+    }),
+  },
+  {
+    area: "Diseno",
+    score: 99,
+    match: (text) => hasAny(text, ["diseno", "bonito", "ui", "interfaz", "pantalla", "visual"]),
+    reply: () => ({
+      title: "Mejora visual",
+      body: [
+        "Para que se vea mas pro:",
+        "1. Una accion principal clara.",
+        "2. Menos texto en pantalla y mejor jerarquia.",
+        "3. Espacios consistentes.",
+        "4. Estados visibles: vacio, escribiendo, respuesta, error.",
+        "5. Colores con contraste, no todo del mismo tono.",
+      ].join("\n"),
+    }),
+  },
   {
     area: "React Native",
     score: 98,
@@ -209,7 +267,7 @@ function buildFallback(text, intent) {
     title: "Siguiente paso",
     area: "General",
     body: [
-      "Para ayudarte mejor, lo convierto en una ruta simple:",
+      "Entendi que quieres avanzar, aunque el mensaje venga rapidito. Lo convierto en una ruta simple:",
       "1. Que quieres lograr.",
       "2. Que tienes ahora.",
       "3. Que te esta bloqueando.",
@@ -245,10 +303,15 @@ function respond(text, history = []) {
     ? `\n\nTambien detecte:\n${extras.map((item) => `- ${item.area}: ${item.title}`).join("\n")}`
     : "";
 
+  const nextQuestion =
+    intent === "debug"
+      ? "\n\nSiguiente pregunta para ti: que error exacto aparece y en que archivo?"
+      : "\n\nSiguiente pregunta para ti: quieres que lo haga como lista, codigo o plan de cambios?";
+
   return {
     area: primary.area,
     title: primary.title,
-    text: `${humanOpening(intent)}\n\n${primary.body}${extraLine}${contextLine}`,
+    text: `${humanOpening(intent)}\n\n${primary.body}${extraLine}${contextLine}${nextQuestion}`,
   };
 }
 
