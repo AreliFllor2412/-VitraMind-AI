@@ -1,22 +1,27 @@
+from modulos.inteligencia import normalizar
+
+
 def detectar_texto(texto):
-    texto_lower = texto.lower()
+    texto_normal = normalizar(texto)
 
-    if texto_lower.startswith("resume:"):
-        contenido = texto.replace("resume:", "").strip()
+    if texto_normal.startswith("resume:"):
+        contenido = texto.split(":", 1)[1].strip()
         palabras = contenido.split()
+        resumen = " ".join(palabras[:35])
 
-        resumen = " ".join(palabras[:25])
+        if len(palabras) > 35:
+            resumen += "..."
 
-        return "Resumen rápido", resumen + "..."
+        return "Resumen rapido", resumen or "No encontre texto para resumir."
 
-    if texto_lower.startswith("ordena:"):
-        contenido = texto.replace("ordena:", "").strip()
-        partes = [p.strip() for p in contenido.split(",")]
+    if texto_normal.startswith("ordena:"):
+        contenido = texto.split(":", 1)[1].strip()
+        partes = [p.strip() for p in contenido.split(",") if p.strip()]
 
-        resultado = ""
-        for i, parte in enumerate(partes, start=1):
-            resultado += f"{i}. {parte}\n"
+        if not partes:
+            return "Texto ordenado", "No encontre elementos separados por coma."
 
+        resultado = "\n".join(f"{i}. {parte}" for i, parte in enumerate(partes, start=1))
         return "Texto ordenado", resultado
 
     return None

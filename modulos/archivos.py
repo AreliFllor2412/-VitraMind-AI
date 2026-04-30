@@ -1,22 +1,26 @@
-def detectar_archivo(texto):
-    texto = texto.lower()
+from modulos.inteligencia import normalizar
 
-    if "crear nota" in texto:
-        contenido = texto.replace("crear nota", "").strip()
+
+def detectar_archivo(texto):
+    texto_normal = normalizar(texto)
+
+    if "crear nota" in texto_normal:
+        indice = texto_normal.find("crear nota")
+        contenido = texto[indice + len("crear nota"):].strip()
 
         with open("nota_ia.txt", "a", encoding="utf-8") as archivo:
             archivo.write(contenido + "\n")
 
-        return "Archivo creado", "Guardé tu nota en nota_ia.txt"
+        return "Nota guardada", "Guarde tu nota en nota_ia.txt"
 
-    if "leer nota" in texto:
+    if "leer nota" in texto_normal:
         try:
             with open("nota_ia.txt", "r", encoding="utf-8") as archivo:
                 contenido = archivo.read()
 
-            return "Nota guardada", contenido if contenido.strip() else "La nota está vacía."
+            return "Nota guardada", contenido if contenido.strip() else "La nota esta vacia."
 
         except FileNotFoundError:
-            return "Nota guardada", "No existe nota_ia.txt todavía."
+            return "Nota guardada", "No existe nota_ia.txt todavia."
 
     return None

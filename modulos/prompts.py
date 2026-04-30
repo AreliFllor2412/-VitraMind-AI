@@ -1,26 +1,26 @@
+from modulos.inteligencia import normalizar
+
+
 def detectar_prompt(texto):
-    texto = texto.lower()
+    texto = normalizar(texto)
 
     if "prompt" in texto:
         return "Prompt profesional", """Estructura recomendada:
 
-Actúa como [rol].
-Necesito mejorar [módulo/vista].
-Respeta estas reglas:
-- no cambiar lógica
-- no cambiar rutas
-- no cambiar variables
-- solo diseño
+Actua como [rol].
+Necesito [objetivo concreto].
+Contexto:
+- [framework/proyecto]
+- [archivo o modulo]
+- [restricciones]
 
-Estilo:
-- profesional
-- moderno
-- limpio
-- accesible
+Reglas:
+- conserva la logica existente
+- respeta nombres y rutas
+- explica cambios importantes
 
 Entrega:
-- código completo
-- listo para copiar y pegar
-"""
+- solucion lista para usar
+- pasos de verificacion"""
 
     return None

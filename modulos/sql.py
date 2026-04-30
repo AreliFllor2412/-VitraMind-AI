@@ -1,86 +1,76 @@
+from modulos.inteligencia import normalizar
+
+
 def detectar_sql(texto):
-    texto = texto.lower()
+    texto = normalizar(texto)
 
     if "backup" in texto or "respaldo" in texto:
-        return "Database Reliability", """Comando de respaldo profesional:
-¡Claro, Areli! Mantener los datos seguros es prioridad. Aquí tienes el comando para que duermas tranquila:
-
+        return "Respaldo de base de datos", """Comando base:
 mysqldump -u root -p nombre_base > backup.sql
 
-Profesional:
-mysqldump -u root -p --routines --triggers --events --single-transaction --databases nombre_base > backup.sql
-"""
+Comando mas completo:
+mysqldump -u root -p --routines --triggers --events --single-transaction --databases nombre_base > backup.sql"""
 
     if "migracion" in texto or "migration" in texto:
-        return "Migraciones", """Revisa:
-¡Ojo con las migraciones! Antes de darle al enter, dale una vuelta a esto:
-1. ¿El nombre de la tabla es el correcto?
-2. ¿Están todos los campos y sus tipos?
-3. ¿Las llaves foráneas tienen sentido?
-¡Y por favor, ni se te ocurra el migrate:fresh en producción sin un backup!"""
+        return "Migraciones", """Antes de ejecutar:
+1. Confirma tabla y nombres de columnas.
+2. Revisa tipos de datos.
+3. Valida llaves foraneas.
+4. Haz backup si hay datos importantes.
+5. Evita migrate:fresh en produccion."""
 
     if "consulta" in texto or "select" in texto:
-        return "Consulta SQL", """Ejemplo base:
-¿Buscando datos? Aquí tienes cómo hacer un SELECT que se vea limpio:
-
-Joins Profesionales:
-SELECT u.nombre, p.nombre_proyecto 
+        return "Consulta SQL", """Ejemplo:
+SELECT u.nombre, p.nombre_proyecto
 FROM usuarios u
 INNER JOIN proyectos p ON u.id = p.usuario_id
-WHERE u.status = 'Activo';
-"""
+WHERE u.status = 'Activo';"""
 
-    if "optimizacion" in texto or "lento" in texto or "index" in texto:
-        return "Optimización SQL", """¿La base de datos está lenta? Vamos a darle un boost de energía:
+    if "optimizacion" in texto or "optimizar" in texto or "lento" in texto or "index" in texto:
+        return "Optimizacion SQL", """Checklist:
+1. Usa EXPLAIN para revisar el plan.
+2. Agrega indices donde filtras o haces joins.
+3. Evita SELECT *.
+4. Pagina resultados grandes.
+5. Mide antes y despues."""
 
-1. Índices: CREATE INDEX idx_usuario_email ON usuarios(email);
-2. EXPLAIN: Usa 'EXPLAIN SELECT...' para ver cómo actúa el motor.
-3. Evita SELECT *: Trae solo las columnas necesarias.
-4. Constraints: Asegura integridad con FOREIGN KEY y UNIQUE.
-"""
-
-    if "diseño" in texto and "db" in texto:
-        return "Diseño de Base de Datos", """Reglas de Oro:
-1. Normalización (1NF, 2NF, 3NF).
-2. Nombres de tablas en plural o singular consistente.
-3. Campos de auditoría: created_at, updated_at, deleted_at.
-4. Tipos de datos correctos (no uses VARCHAR(255) para todo).
-"""
+    if "diseno" in texto and any(p in texto for p in ["db", "base", "datos"]):
+        return "Diseno de base de datos", """Reglas base:
+1. Normaliza hasta donde tenga sentido.
+2. Usa nombres consistentes.
+3. Agrega created_at, updated_at y deleted_at si aplica.
+4. Elige tipos correctos.
+5. Documenta relaciones importantes."""
 
     if "transaccion" in texto or "acid" in texto:
-        return "Integridad de Datos (ACID)", """Gestión de Transacciones:
+        return "Integridad de datos", """Transacciones:
+1. START TRANSACTION;
+2. Ejecuta operaciones relacionadas.
+3. COMMIT si todo salio bien.
+4. ROLLBACK si algo falla.
 
-1. START TRANSACTION; ... COMMIT; / ROLLBACK;
-2. Propiedades ACID: Atomicidad, Consistencia, Aislamiento, Durabilidad.
-3. Niveles de Aislamiento: Read Uncommitted, Read Committed, Repeatable Read, Serializable.
-"""
+ACID: atomicidad, consistencia, aislamiento y durabilidad."""
 
-    if "seguridad" in texto or "injection" in texto:
-        return "Seguridad en Base de Datos", """Protección Crítica:
-
-1. Prepared Statements: NUNCA concatenar variables en el string SQL.
-2. Sanitize: Limpia inputs de usuario.
-3. Privilegios: El usuario de la app no debe ser 'root'. Solo permisos necesarios (SELECT, INSERT, UPDATE).
-4. Encriptación: Hashea passwords con Argon2 o Bcrypt (nunca MD5).
-5. Auditoría: Implementa logs de quién modificó qué y cuándo.
-"""
+    if "seguridad" in texto or "injection" in texto or "inyeccion" in texto:
+        return "Seguridad en base de datos", """Proteccion:
+1. Usa prepared statements.
+2. No concatenes input de usuario.
+3. El usuario de la app no debe ser root.
+4. Hashea passwords con Argon2 o bcrypt.
+5. Registra cambios sensibles."""
 
     if any(p in texto for p in ["escalabilidad", "sharding", "replicacion", "cluster"]):
-        return "Escalabilidad de Bases de Datos", """Estrategias Avanzadas:
+        return "Escalabilidad de datos", """Estrategias:
+1. Replicas para lectura.
+2. Cache para datos frecuentes.
+3. Particionamiento si el volumen lo exige.
+4. Colas para trabajos pesados.
+5. Monitoreo antes de escalar."""
 
-1. Replicación (Master-Slave/Master-Master): Mejora lectura y disponibilidad.
-2. Sharding (Particionamiento Horizontal): Distribuye datos en múltiples servidores.
-3. Load Balancing: Distribuye consultas entre réplicas o shards.
-4. Caching: Reduce la carga de la DB para datos frecuentemente accedidos.
-"""
+    if any(p in texto for p in ["cte", "window function", "subconsulta"]):
+        return "Consultas avanzadas", """Tecnicas:
+1. CTEs para organizar consultas complejas.
+2. Window functions para ranking, acumulados y comparaciones.
+3. Subconsultas cuando simplifican la lectura."""
 
-    if any(p in texto for p in ["cte", "window function", "subconsulta avanzada"]):
-        return "Optimización de Consultas Avanzadas", """Técnicas para Queries Complejas:
-
-1. CTEs (Common Table Expressions): Organiza consultas complejas y recursivas.
-2. Window Functions: Realiza cálculos sobre un conjunto de filas relacionadas (ej. RANK(), ROW_NUMBER(), LAG(), LEAD()).
-3. Subconsultas Correlacionadas: Útiles para comparar filas con un subconjunto de datos.
-"""
     return None
-
-    

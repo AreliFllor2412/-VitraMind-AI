@@ -1,73 +1,67 @@
-# 🤖 VitraMind AI
+# VitraMind AI
 
-![Python](https://img.shields.io/badge/Python-3.x-blue)
-![Status](https://img.shields.io/badge/Status-Active-green)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
+Asistente inteligente en Python para Areli, pensado para trabajo diario de programacion, organizacion y soporte tecnico.
 
----
+## Que hace
 
-## 🧠 Descripción
+- Entiende texto con o sin acentos gracias a normalizacion de entrada.
+- Detecta intencion: pregunta, peticion, accion, conversacion o debugging.
+- Prioriza respuestas por modulo para evitar ruido.
+- Agrega diagnostico rapido cuando detecta errores.
+- Usa memoria de sesion para mostrar contexto reciente.
+- Guarda historial en `historial.txt`.
+- Maneja tareas, notas, resumenes, calculos, Git, SQL, DevOps, seguridad y soporte emocional.
 
-**VitraMind AI** es un asistente inteligente desarrollado en Python que combina análisis emocional, soporte técnico en programación y herramientas de productividad en un solo sistema.
+## Comandos utiles
 
-Está diseñado para entornos reales de trabajo, donde se requiere tomar decisiones rápidas, resolver errores técnicos y mantener organización personal y profesional.
+```txt
+ayuda
+memoria
+limpiar
+salir
+tarea: revisar login
+ver tareas
+crear nota recordar revisar backups
+leer nota
+calcula 10 * (5 + 2)
+resume: texto largo...
+ordena: punto uno, punto dos, punto tres
+```
 
----
-
-## 🚀 Funcionalidades
-
-### 💙 Análisis emocional
-- Detecta estrés, frustración, motivación
-- Recomienda acciones prácticas
-
-### 💻 Soporte técnico
-- Laravel, React, Vite
-- Debugging estructurado
-- Errores comunes
-
-### 🗄️ Base de datos
-- SQL / MySQL
-- Consultas
-- Migraciones
-- Backups
-
-### 🔄 Git
-- Pull, commit, merge, rebase
-- Flujo recomendado
-
-### 📁 Gestión de proyectos
-- Estructura de módulos
-- Organización de sistemas
-- Mejora de diseño UI
-
-### 📝 Productividad
-- Gestión de tareas
-- Calculadora integrada
-- Notas y archivos
-- Resumen y orden de texto
-
-### 🧠 Memoria
-- Guarda interacción
-- Historial en archivo
-
----
-
-## 🧩 Arquitectura
+## Arquitectura
 
 ```txt
 IA_Areli/
-├── main.py
-├── config.py
-├── historial.txt
-├── modulos/
-│   ├── emociones.py
-│   ├── programacion.py
-│   ├── sql.py
-│   ├── proyectos.py
-│   ├── git.py
-│   ├── horarios.py
-│   ├── prompts.py
-│   ├── tareas.py
-│   ├── calculadora.py
-│   ├── archivos.py
-│   └── texto.py
+|-- main.py
+|-- config.py
+|-- security.py
+|-- historial.txt
+|-- modulos/
+|   |-- inteligencia.py
+|   |-- emociones.py
+|   |-- programacion.py
+|   |-- sql.py
+|   |-- proyectos.py
+|   |-- git.py
+|   |-- devops.py
+|   |-- horarios.py
+|   |-- prompts.py
+|   |-- tareas.py
+|   |-- calculadora.py
+|   |-- archivos.py
+|   |-- memoria.py
+|   |-- recomendaciones.py
+|   `-- texto.py
+```
+
+## Ejecutar
+
+```bash
+python main.py
+```
+
+Si `python` esta bloqueado en Windows, prueba:
+
+```bash
+py main.py
+```
