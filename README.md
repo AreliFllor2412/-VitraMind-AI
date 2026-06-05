@@ -81,7 +81,6 @@ py main.py
 
 La app movil vive en `mobile/`. Incluye:
 
-- Chat principal.
 - Respuestas mas humanas.
 - Accesos rapidos por area.
 - Contexto reciente de conversacion.
