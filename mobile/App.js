@@ -21,8 +21,8 @@ const INITIAL_MESSAGES = [
     id: "intro",
     role: "assistant",
     area: "Inicio",
-    title: "Lista para ayudarte",
-    text: "Hola, Areli. Soy tu asistente para codigo, tareas, seguridad, SQL, Git y calma mental cuando el bug se pone intenso. No tienes que escribir perfecto; hablame como te salga y yo lo acomodo contigo.",
+    title: "Asistente listo",
+    text: "Hola, Areli. Tengo listo el espacio para ordenar codigo, tareas, SQL, Git, seguridad e ideas de producto. Escribe como te salga; yo convierto la idea en pasos claros.",
   },
 ];
 
@@ -66,6 +66,15 @@ function MessageBubble({ message }) {
   );
 }
 
+function IconText({ icon, label }) {
+  return (
+    <View style={styles.iconText}>
+      <Text style={styles.iconTextIcon}>{icon}</Text>
+      <Text style={styles.iconTextLabel}>{label}</Text>
+    </View>
+  );
+}
+
 function QuickChip({ label, onPress }) {
   return (
     <Pressable style={({ pressed }) => [styles.quickChip, pressed && styles.pressed]} onPress={onPress}>
@@ -87,11 +96,9 @@ function InsightPanel({ count, selectedMode, onModeChange, onSuggestion }) {
 
   return (
     <View style={styles.insightPanel}>
-      <Text style={styles.insightEyebrow}>Centro de mando</Text>
-      <Text style={styles.insightTitle}>Preguntame sin pena, aunque venga con dedazos.</Text>
-      <Text style={styles.insightCopy}>
-        Quiero sonar mas humana: si vienes cansada, te doy pasos suaves; si vienes con prisa, voy directo; si vienes con una idea, la ordeno.
-      </Text>
+      <Text style={styles.insightEyebrow}>Workspace</Text>
+      <Text style={styles.insightTitle}>VitraMind AI</Text>
+      <Text style={styles.insightCopy}>Asistente personal para desarrollo, organizacion y decisiones tecnicas.</Text>
 
       <View style={styles.metricRow}>
         <View style={styles.metricBox}>
@@ -99,9 +106,15 @@ function InsightPanel({ count, selectedMode, onModeChange, onSuggestion }) {
           <Text style={styles.metricLabel}>mensajes</Text>
         </View>
         <View style={styles.metricBoxAlt}>
-          <Text style={styles.metricValueAlt}>3</Text>
-          <Text style={styles.metricLabelAlt}>pasos claros</Text>
+          <Text style={styles.metricValueAlt}>{USER_MODES.length}</Text>
+          <Text style={styles.metricLabelAlt}>modos</Text>
         </View>
+      </View>
+
+      <View style={styles.focusBox}>
+        <IconText icon="01" label="Detecta tema, energia y formato." />
+        <IconText icon="02" label="Propone acciones despues de responder." />
+        <IconText icon="03" label="Mantiene contexto reciente del chat." />
       </View>
 
       <Text style={styles.insightSectionTitle}>Modo de respuesta</Text>
@@ -191,10 +204,10 @@ export default function App() {
         <View style={styles.header}>
           <View>
             <Text style={styles.eyebrow}>VitraMind AI</Text>
-            <Text style={styles.heading}>Areli, vamos paso a paso</Text>
+            <Text style={styles.heading}>Panel de trabajo</Text>
           </View>
           <Pressable style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]} onPress={clearChat}>
-            <Text style={styles.iconButtonText}>CL</Text>
+            <Text style={styles.iconButtonText}>Limpiar</Text>
           </Pressable>
         </View>
 
@@ -209,10 +222,20 @@ export default function App() {
           )}
 
           <View style={styles.chatShell}>
+            <View style={styles.projectStrip}>
+              <View>
+                <Text style={styles.projectLabel}>Proyecto activo</Text>
+                <Text style={styles.projectTitle}>IA_Areli / Asistente personal</Text>
+              </View>
+              <View style={styles.projectBadge}>
+                <Text style={styles.projectBadgeText}>Local</Text>
+              </View>
+            </View>
+
             <View style={styles.statusBand}>
               <View>
                 <Text style={styles.statusLabel}>Modo</Text>
-                <Text style={styles.statusValue}>Humano y tecnico</Text>
+                <Text style={styles.statusValue}>Tecnico</Text>
               </View>
               <View style={styles.statusDivider} />
               <View>
@@ -283,11 +306,18 @@ export default function App() {
                 style={styles.input}
                 value={input}
                 onChangeText={setInput}
-                placeholder="Escribe tu duda, error o idea..."
+                placeholder="Escribe una duda, error, tarea o idea..."
                 placeholderTextColor="#6F7480"
                 multiline
               />
-              <Pressable style={({ pressed }) => [styles.sendButton, pressed && styles.pressed]} onPress={() => sendMessage()}>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.sendButton,
+                  !input.trim() && styles.sendButtonDisabled,
+                  pressed && styles.pressed,
+                ]}
+                onPress={() => sendMessage()}
+              >
                 <Text style={styles.sendButtonText}>Enviar</Text>
               </Pressable>
             </View>
@@ -301,43 +331,83 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#F6F8FB",
+    backgroundColor: "#F4F6F8",
   },
   screen: {
     flex: 1,
-    paddingHorizontal: 18,
-    paddingTop: 12,
+    paddingHorizontal: 20,
+    paddingTop: 14,
   },
   header: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingBottom: 14,
+    paddingBottom: 16,
   },
   eyebrow: {
-    color: "#0F766E",
+    color: "#36527A",
     fontSize: 12,
     fontWeight: "800",
     letterSpacing: 0,
     textTransform: "uppercase",
   },
   heading: {
-    color: "#141821",
-    fontSize: 24,
+    color: "#111827",
+    fontSize: 26,
     fontWeight: "800",
     letterSpacing: 0,
     marginTop: 3,
   },
   iconButton: {
     alignItems: "center",
-    backgroundColor: "#141821",
+    backgroundColor: "#111827",
     borderRadius: 8,
-    height: 42,
+    height: 40,
     justifyContent: "center",
-    width: 42,
+    paddingHorizontal: 14,
   },
   iconButtonText: {
     color: "#FFFFFF",
+    fontSize: 13,
+    fontWeight: "900",
+    letterSpacing: 0,
+  },
+  projectStrip: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#D8DEE8",
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 13,
+  },
+  projectLabel: {
+    color: "#697386",
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 0,
+    textTransform: "uppercase",
+  },
+  projectTitle: {
+    color: "#111827",
+    fontSize: 15,
+    fontWeight: "900",
+    letterSpacing: 0,
+    marginTop: 2,
+  },
+  projectBadge: {
+    backgroundColor: "#EEF7F5",
+    borderColor: "#B8DCD6",
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  projectBadgeText: {
+    color: "#0B6B61",
     fontSize: 12,
     fontWeight: "900",
     letterSpacing: 0,
@@ -345,7 +415,7 @@ const styles = StyleSheet.create({
   statusBand: {
     alignItems: "center",
     backgroundColor: "#FFFFFF",
-    borderColor: "#DCE3EA",
+    borderColor: "#D8DEE8",
     borderRadius: 8,
     borderWidth: 1,
     flexDirection: "row",
@@ -354,20 +424,20 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   statusLabel: {
-    color: "#6F7480",
+    color: "#697386",
     fontSize: 12,
     fontWeight: "700",
     letterSpacing: 0,
   },
   statusValue: {
-    color: "#141821",
+    color: "#111827",
     fontSize: 14,
     fontWeight: "800",
     letterSpacing: 0,
     marginTop: 2,
   },
   statusDivider: {
-    backgroundColor: "#DCE3EA",
+    backgroundColor: "#D8DEE8",
     height: 32,
     width: 1,
   },
@@ -383,8 +453,8 @@ const styles = StyleSheet.create({
   },
   quickChip: {
     alignItems: "center",
-    backgroundColor: "#E8F5F3",
-    borderColor: "#A9D9D2",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#CBD5E1",
     borderRadius: 8,
     borderWidth: 1,
     height: 36,
@@ -393,7 +463,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   quickChipText: {
-    color: "#0F766E",
+    color: "#334155",
     fontSize: 13,
     fontWeight: "800",
     letterSpacing: 0,
@@ -414,40 +484,40 @@ const styles = StyleSheet.create({
   },
   bubble: {
     borderRadius: 8,
-    maxWidth: "88%",
-    paddingHorizontal: 14,
-    paddingVertical: 12,
+    maxWidth: "90%",
+    paddingHorizontal: 15,
+    paddingVertical: 13,
   },
   assistantBubble: {
     backgroundColor: "#FFFFFF",
-    borderColor: "#DCE3EA",
+    borderColor: "#D8DEE8",
     borderWidth: 1,
   },
   userBubble: {
-    backgroundColor: "#2447A3",
+    backgroundColor: "#1F3A68",
   },
   messageMeta: {
-    borderBottomColor: "#E8EDF3",
+    borderBottomColor: "#E9EEF5",
     borderBottomWidth: 1,
     marginBottom: 8,
     paddingBottom: 7,
   },
   areaText: {
-    color: "#D65A31",
+    color: "#B45309",
     fontSize: 11,
     fontWeight: "900",
     letterSpacing: 0,
     textTransform: "uppercase",
   },
   titleText: {
-    color: "#141821",
+    color: "#111827",
     fontSize: 15,
     fontWeight: "900",
     letterSpacing: 0,
     marginTop: 2,
   },
   messageText: {
-    color: "#2D3440",
+    color: "#273142",
     fontSize: 15,
     letterSpacing: 0,
     lineHeight: 22,
@@ -463,15 +533,15 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   insightChip: {
-    backgroundColor: "#EEF7F5",
-    borderColor: "#C4E4DF",
+    backgroundColor: "#F0F7F5",
+    borderColor: "#C7E2DD",
     borderRadius: 8,
     borderWidth: 1,
     paddingHorizontal: 8,
     paddingVertical: 5,
   },
   insightChipText: {
-    color: "#0F766E",
+    color: "#0B6B61",
     fontSize: 11,
     fontWeight: "800",
     letterSpacing: 0,
@@ -483,36 +553,37 @@ const styles = StyleSheet.create({
     marginTop: 9,
   },
   actionPill: {
-    backgroundColor: "#FFF3ED",
-    borderColor: "#F3C5B2",
+    backgroundColor: "#FFF7ED",
+    borderColor: "#FED7AA",
     borderRadius: 8,
     borderWidth: 1,
     paddingHorizontal: 9,
     paddingVertical: 6,
   },
   actionPillText: {
-    color: "#B94924",
+    color: "#9A3412",
     fontSize: 12,
     fontWeight: "900",
     letterSpacing: 0,
   },
   suggestionPanel: {
-    borderColor: "#DCE3EA",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#D8DEE8",
     borderRadius: 8,
     borderWidth: 1,
     marginTop: 8,
     padding: 12,
   },
   suggestionTitle: {
-    color: "#141821",
+    color: "#111827",
     fontSize: 14,
     fontWeight: "900",
     letterSpacing: 0,
     marginBottom: 8,
   },
   suggestionButton: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#DCE3EA",
+    backgroundColor: "#F8FAFC",
+    borderColor: "#E2E8F0",
     borderRadius: 8,
     borderWidth: 1,
     marginTop: 8,
@@ -520,15 +591,15 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   suggestionText: {
-    color: "#2D3440",
+    color: "#273142",
     fontSize: 14,
     fontWeight: "700",
     letterSpacing: 0,
   },
   composer: {
     alignItems: "flex-end",
-    backgroundColor: "#F6F8FB",
-    borderTopColor: "#DCE3EA",
+    backgroundColor: "#F4F6F8",
+    borderTopColor: "#D8DEE8",
     borderTopWidth: 1,
     flexDirection: "row",
     gap: 10,
@@ -537,10 +608,10 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "#FFFFFF",
-    borderColor: "#C9D3DF",
+    borderColor: "#C3CCD9",
     borderRadius: 8,
     borderWidth: 1,
-    color: "#141821",
+    color: "#111827",
     flex: 1,
     fontSize: 15,
     letterSpacing: 0,
@@ -551,11 +622,14 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     alignItems: "center",
-    backgroundColor: "#D65A31",
+    backgroundColor: "#B45309",
     borderRadius: 8,
     height: 46,
     justifyContent: "center",
     paddingHorizontal: 16,
+  },
+  sendButtonDisabled: {
+    backgroundColor: "#9CA3AF",
   },
   sendButtonText: {
     color: "#FFFFFF",
@@ -572,22 +646,22 @@ const styles = StyleSheet.create({
   workspaceWide: {
     alignSelf: "center",
     flexDirection: "row",
-    gap: 16,
-    maxWidth: 1160,
+    gap: 18,
+    maxWidth: 1200,
     width: "100%",
   },
   chatShell: {
     flex: 1,
   },
   insightPanel: {
-    backgroundColor: "#141821",
+    backgroundColor: "#111827",
     borderRadius: 8,
     marginTop: 0,
     padding: 18,
-    width: 320,
+    width: 328,
   },
   insightEyebrow: {
-    color: "#66D3C7",
+    color: "#93C5FD",
     fontSize: 12,
     fontWeight: "900",
     letterSpacing: 0,
@@ -595,14 +669,14 @@ const styles = StyleSheet.create({
   },
   insightTitle: {
     color: "#FFFFFF",
-    fontSize: 23,
+    fontSize: 25,
     fontWeight: "900",
     letterSpacing: 0,
     lineHeight: 29,
     marginTop: 8,
   },
   insightCopy: {
-    color: "#C6D1DF",
+    color: "#CBD5E1",
     fontSize: 14,
     letterSpacing: 0,
     lineHeight: 21,
@@ -614,13 +688,13 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   metricBox: {
-    backgroundColor: "#2447A3",
+    backgroundColor: "#1F3A68",
     borderRadius: 8,
     flex: 1,
     padding: 12,
   },
   metricBoxAlt: {
-    backgroundColor: "#0F766E",
+    backgroundColor: "#0B6B61",
     borderRadius: 8,
     flex: 1,
     padding: 12,
@@ -651,6 +725,35 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     marginTop: 2,
   },
+  focusBox: {
+    backgroundColor: "#172033",
+    borderColor: "#27354F",
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 10,
+    marginTop: 16,
+    padding: 12,
+  },
+  iconText: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    gap: 9,
+  },
+  iconTextIcon: {
+    color: "#93C5FD",
+    fontSize: 12,
+    fontWeight: "900",
+    letterSpacing: 0,
+    width: 22,
+  },
+  iconTextLabel: {
+    color: "#D8E1EE",
+    flex: 1,
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0,
+    lineHeight: 17,
+  },
   insightSectionTitle: {
     color: "#FFFFFF",
     fontSize: 14,
@@ -659,8 +762,8 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   sideSuggestion: {
-    backgroundColor: "#242B38",
-    borderColor: "#354154",
+    backgroundColor: "#172033",
+    borderColor: "#27354F",
     borderRadius: 8,
     borderWidth: 1,
     marginTop: 9,
@@ -681,8 +784,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   modeChip: {
-    backgroundColor: "#242B38",
-    borderColor: "#354154",
+    backgroundColor: "#172033",
+    borderColor: "#27354F",
     borderRadius: 8,
     borderWidth: 1,
     height: 32,
@@ -690,8 +793,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   modeChipActive: {
-    backgroundColor: "#66D3C7",
-    borderColor: "#66D3C7",
+    backgroundColor: "#93C5FD",
+    borderColor: "#93C5FD",
   },
   modeChipText: {
     color: "#DDE6F0",
@@ -700,7 +803,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   modeChipTextActive: {
-    color: "#10201E",
+    color: "#0F172A",
   },
   modeDescription: {
     color: "#B8C5D4",
@@ -711,8 +814,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   ideaItem: {
-    backgroundColor: "#18202C",
-    borderLeftColor: "#D65A31",
+    backgroundColor: "#172033",
+    borderLeftColor: "#F59E0B",
     borderLeftWidth: 3,
     borderRadius: 8,
     marginTop: 9,
@@ -727,7 +830,7 @@ const styles = StyleSheet.create({
     lineHeight: 17,
   },
   suggestionTitleAlt: {
-    color: "#141821",
+    color: "#111827",
     fontSize: 14,
     fontWeight: "900",
     letterSpacing: 0,
@@ -735,8 +838,8 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   mobileIdeaItem: {
-    backgroundColor: "#F0F5FA",
-    borderColor: "#DCE3EA",
+    backgroundColor: "#F8FAFC",
+    borderColor: "#E2E8F0",
     borderRadius: 8,
     borderWidth: 1,
     marginTop: 8,
@@ -744,7 +847,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   mobileIdeaText: {
-    color: "#2D3440",
+    color: "#273142",
     fontSize: 13,
     fontWeight: "700",
     letterSpacing: 0,

@@ -235,7 +235,7 @@ const REPLIES = {
   sleep: {
     title: "Modo energia baja",
     body: [
-      "Si tienes sueno, no te voy a mandar a conquistar el mundo ahorita.",
+      "Si tienes sueno, bajamos la exigencia y buscamos avance realista.",
       "",
       "Hagamos una version ligera: agua, brillo bajo, una mini tarea de 10 minutos y una nota de lo que queda pendiente.",
       "",
@@ -411,7 +411,7 @@ function nextLine(analysis) {
     return "Siguiente: dime el archivo o componente y lo convertimos en codigo.";
   }
   if (analysis.intent === "debug") {
-    return "Siguiente: pegam el error exacto o dime en que archivo aparece.";
+    return "Siguiente: pegame el error exacto o dime en que archivo aparece.";
   }
   return "Siguiente: puedo darte version corta, version con ejemplo o plan listo para implementar.";
 }
