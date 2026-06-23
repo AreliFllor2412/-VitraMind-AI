@@ -13,6 +13,7 @@ OPERADORES = {
     ast.Pow: operator.pow,
     ast.Mod: operator.mod,
     ast.USub: operator.neg,
+    ast.UAdd: operator.pos,
 }
 
 FUNCIONES = {
@@ -21,38 +22,80 @@ FUNCIONES = {
     "cos": math.cos,
     "tan": math.tan,
     "log": math.log,
+    "log10": math.log10,
     "ceil": math.ceil,
     "floor": math.floor,
+    "round": round,
+    "abs": abs,
 }
+
+CONSTANTES = {
+    "pi": math.pi,
+    "e": math.e,
+}
+
+MAX_EXPONENTE = 1000
 
 
 def evaluar(nodo):
     if isinstance(nodo, ast.Expression):
         return evaluar(nodo.body)
+
     if isinstance(nodo, ast.Constant) and isinstance(nodo.value, (int, float)):
         return nodo.value
+
+    if isinstance(nodo, ast.Name) and nodo.id in CONSTANTES:
+        return CONSTANTES[nodo.id]
+
     if isinstance(nodo, ast.BinOp) and type(nodo.op) in OPERADORES:
-        return OPERADORES[type(nodo.op)](evaluar(nodo.left), evaluar(nodo.right))
+        izquierda = evaluar(nodo.left)
+        derecha = evaluar(nodo.right)
+
+        if isinstance(nodo.op, ast.Div) and derecha == 0:
+            raise ValueError("No se puede dividir entre cero.")
+
+        if isinstance(nodo.op, ast.Pow) and abs(derecha) > MAX_EXPONENTE:
+            raise ValueError("El exponente es demasiado grande.")
+
+        return OPERADORES[type(nodo.op)](izquierda, derecha)
+
     if isinstance(nodo, ast.UnaryOp) and type(nodo.op) in OPERADORES:
         return OPERADORES[type(nodo.op)](evaluar(nodo.operand))
-    if isinstance(nodo, ast.Call) and isinstance(nodo.func, ast.Name) and nodo.func.id in FUNCIONES:
-        argumentos = [evaluar(arg) for arg in nodo.args]
-        return FUNCIONES[nodo.func.id](*argumentos)
 
-    raise ValueError("Expresion no permitida")
+    if isinstance(nodo, ast.Call) and isinstance(nodo.func, ast.Name):
+        nombre_funcion = nodo.func.id
+
+        if nombre_funcion not in FUNCIONES:
+            raise ValueError("Función no permitida.")
+
+        if nodo.keywords:
+            raise ValueError("No se permiten argumentos con nombre.")
+
+        argumentos = [evaluar(arg) for arg in nodo.args]
+        return FUNCIONES[nombre_funcion](*argumentos)
+
+    raise ValueError("Expresión no permitida.")
 
 
 def detectar_calculo(texto):
     texto_normal = normalizar(texto)
 
-    if texto_normal.startswith("calcula"):
-        expresion = texto[len("calcula"):].strip().replace("^", "**")
+    if not texto_normal.startswith("calcula"):
+        return None
 
-        try:
-            arbol = ast.parse(expresion, mode="eval")
-            resultado = evaluar(arbol)
-            return "Calculadora", f"Resultado: {resultado}"
-        except Exception:
-            return "Error de calculo", "Expresion no valida. Usa +, -, *, /, %, ** o funciones como sqrt(16)."
+    expresion = texto[len("calcula"):].strip().replace("^", "**")
 
-    return None
+    if not expresion:
+        return "Error de cálculo", "Escribe una operación. Ejemplo: calcula 8 * 5."
+
+    try:
+        arbol = ast.parse(expresion, mode="eval")
+        resultado = evaluar(arbol)
+
+        if isinstance(resultado, float) and resultado.is_integer():
+            resultado = int(resultado)
+
+        return "Calculadora", f"Resultado: {resultado}"
+
+    except Exception as error:
+        return "Error de cálculo", f"Expresión no válida: {error}"

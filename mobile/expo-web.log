@@ -1,0 +1,9 @@
+
+> vitramind-mobile@1.0.0 web
+> expo start --web --host localhost --port 8083
+
+Starting project at C:\Users\PROGRAMADORA\Desktop\IA_Areli\mobile
+Starting Metro Bundler
+Waiting on http://localhost:8083
+Logs for your project will appear below.
+Web Bundled 1211ms node_modules\expo\AppEntry.js (97 modules)
