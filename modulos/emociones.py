@@ -1,45 +1,132 @@
 from modulos.inteligencia import normalizar
 
 
+EMOCIONES = {
+    "energia": {
+        "area": "Gestión de energía",
+        "nivel": "alto",
+        "keywords": [
+            "estres", "estresada", "presion", "cansada", "agotada",
+            "burnout", "saturada", "mucho trabajo", "no puedo", "demasiado"
+        ],
+        "respuesta": """Te escucho. Parece que traes mucha carga encima.
+
+Acción corta:
+1. Pausa 5 minutos.
+2. Escribe el problema en una sola frase.
+3. Elige únicamente el siguiente paso.
+
+No necesitas resolver todo ahorita; sólo ordenar lo inmediato."""
+    },
+    "tristeza": {
+        "area": "Apoyo personal",
+        "nivel": "medio",
+        "keywords": [
+            "triste", "mal", "llorar", "sola", "ansiedad",
+            "desanimada", "decepcion", "vacía", "sin ánimo"
+        ],
+        "respuesta": """Siento que estés pasando por esto.
+
+Vamos poco a poco:
+1. Qué pasó.
+2. Qué necesitas ahora.
+3. Qué acción pequeña puede devolverte un poco de calma.
+
+Estoy contigo para ordenarlo."""
+    },
+    "frustracion": {
+        "area": "Foco en crisis",
+        "nivel": "alto",
+        "keywords": [
+            "enojada", "molesta", "frustrada", "coraje",
+            "hartazgo", "fastidio", "me desespera", "no sale"
+        ],
+        "respuesta": """Tiene sentido que te frustre.
+
+Vamos a quitarle ruido:
+1. Qué esperabas que pasara.
+2. Qué pasó realmente.
+3. Qué cambiaste justo antes.
+4. Cuál es la prueba mínima para encontrar la causa."""
+    },
+    "motivacion": {
+        "area": "Momentum",
+        "nivel": "positivo",
+        "keywords": [
+            "feliz", "contenta", "motivada", "bien",
+            "excelente", "emocionada", "orgullosa", "avance"
+        ],
+        "respuesta": """Qué bueno leerte así.
+
+Aprovechemos esa energía:
+1. Cierra una tarea pequeña.
+2. Documenta el avance.
+3. Deja preparado el siguiente paso.
+
+Ese impulso puede convertirse en progreso real."""
+    },
+    "recuperacion": {
+        "area": "Recuperación",
+        "nivel": "medio",
+        "keywords": [
+            "sueno", "sueño", "cansancio", "sin ganas",
+            "dormir", "agotamiento", "me pesa"
+        ],
+        "respuesta": """Tu cerebro también necesita mantenimiento.
+
+Si puedes:
+1. Toma agua.
+2. Estírate.
+3. Descansa unos minutos.
+
+Si no puedes parar, reduce la tarea a una sola acción verificable."""
+    },
+}
+
+
 def detectar_emocion(texto):
     texto = normalizar(texto)
 
-    if any(p in texto for p in ["estres", "estresada", "presion", "cansada", "agotada", "burnout"]):
-        return "Gestion de energia", """Te escucho, Areli. Si estas saturada, primero bajemos la presion.
+    coincidencias = []
 
-Accion corta:
-1. Pausa 5 minutos.
-2. Escribe el problema en una frase.
-3. Elige solo el siguiente paso, no todo el proyecto.
+    for emocion, config in EMOCIONES.items():
+        score = sum(1 for palabra in config["keywords"] if palabra in texto)
 
-Tu claridad vale mas que avanzar en automatico."""
+        if score > 0:
+            coincidencias.append({
+                "emocion": emocion,
+                "area": config["area"],
+                "nivel": config["nivel"],
+                "score": score,
+                "respuesta": config["respuesta"],
+            })
 
-    if any(p in texto for p in ["triste", "mal", "llorar", "sola", "ansiedad"]):
-        return "Apoyo personal", """Siento que estes pasando por esto.
+    if not coincidencias:
+        return None
 
-No tienes que resolver todo de golpe. Podemos quedarnos con una cosa pequena:
-1. Que paso.
-2. Que necesitas ahora.
-3. Que accion te devuelve un poco de calma."""
+    coincidencias.sort(key=lambda item: item["score"], reverse=True)
 
-    if any(p in texto for p in ["enojada", "molesta", "frustrada", "coraje"]):
-        return "Foco en crisis", """Tiene sentido que te frustre. Vamos a quitarle ruido al problema:
+    principal = coincidencias[0]
 
-1. Que esperabas que pasara.
-2. Que paso realmente.
-3. Que cambiaste justo antes.
-4. Cual es la prueba minima para confirmar la causa."""
+    return principal["area"], principal["respuesta"]
 
-    if any(p in texto for p in ["feliz", "contenta", "motivada", "bien", "excelente"]):
-        return "Momentum", """Que bonito leerte asi, Areli. Aprovechemos esa energia:
 
-1. Cierra una tarea pequena.
-2. Documenta el avance.
-3. Deja preparado el siguiente paso."""
+def analizar_emocion(texto):
+    texto = normalizar(texto)
 
-    if any(p in texto for p in ["sueno", "cansancio", "sin ganas"]):
-        return "Recuperacion", """Tu cerebro tambien necesita mantenimiento.
+    resultados = []
 
-Si puedes, toma agua, estirate y descansa unos minutos. Si no puedes parar, reduce la tarea a una sola accion verificable."""
+    for emocion, config in EMOCIONES.items():
+        score = sum(1 for palabra in config["keywords"] if palabra in texto)
 
-    return None
+        if score > 0:
+            resultados.append({
+                "emocion": emocion,
+                "area": config["area"],
+                "nivel": config["nivel"],
+                "score": score,
+            })
+
+    resultados.sort(key=lambda item: item["score"], reverse=True)
+
+    return resultados
