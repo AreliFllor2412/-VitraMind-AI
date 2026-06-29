@@ -348,7 +348,7 @@ Buenas prácticas
 
 git status
 
-git add .
+
 
 git commit -m "mensaje"
 
